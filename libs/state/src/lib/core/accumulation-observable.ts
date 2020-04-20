@@ -39,7 +39,7 @@ export function createAccumulationObservable<T extends object>(
       tap(newState => (compositionObservable.state = newState)),
       publishReplay(1)
     ),
-    nextSlice: nextSliceOrObservable,
+    nextSliceOrObservable,
     subscribe
   };
 
