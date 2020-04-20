@@ -36,7 +36,7 @@ function setupAccumulationObservable<T extends object>(cfg: {
     acc.subscribe();
   }
   if (initialState) {
-    acc.nextSlice(initialState);
+    acc.nextSliceOrObservable(initialState);
   }
   return acc;
 }
@@ -118,7 +118,7 @@ describe('createAccumulationObservable', () => {
     it('should add new base-state by partial', () => {
       testScheduler.run(({ expectObservable }) => {
         const acc = setupAccumulationObservable<PrimitiveState>({});
-        acc.nextSlice({ num: 42 });
+        acc.nextSliceOrObservable({ num: 42 });
         expectObservable(acc.state$.pipe(pluck('num'))).toBe('s', { s: 42 });
       });
     });
@@ -130,7 +130,7 @@ describe('createAccumulationObservable', () => {
       acc.state$
         .pipe(pluck('num'))
         .subscribe(res => expect(res).toBe({ s: 42 }));
-      acc.nextSlice({ num: 43 });
+      acc.nextSliceOrObservable({ num: 43 });
       acc.state$
         .pipe(pluck('num'))
         .subscribe(res => expect(res).toBe({ s: 43 }));
@@ -141,7 +141,7 @@ describe('createAccumulationObservable', () => {
     it('should add new slices', () => {
       testScheduler.run(({ expectObservable }) => {
         const acc = setupAccumulationObservable<PrimitiveState>({});
-        acc.nextSliceObservable(of({ num: 42 }));
+        acc.nextSliceOrObservable(of({ num: 42 }));
         expectObservable(acc.state$.pipe(pluck('num'))).toBe('s', { s: 42 });
       });
     });
@@ -153,7 +153,7 @@ describe('createAccumulationObservable', () => {
       acc.state$
         .pipe(pluck('num'))
         .subscribe(res => expect(res).toBe({ s: 42 }));
-      acc.nextSliceObservable(of({ num: 43 }));
+      acc.nextSliceOrObservable(of({ num: 43 }));
       acc.state$
         .pipe(pluck('num'))
         .subscribe(res => expect(res).toBe({ s: 42 }));

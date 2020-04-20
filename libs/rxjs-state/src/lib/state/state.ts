@@ -39,8 +39,12 @@ export class RxJsState<T extends object> implements Subscribable<any> {
 
   readonly $ = this.accumulationObservable.state$;
 
-  constructor() {}
-
+  /**
+   * @example
+   * const ls = new State<{test: string, bar: number}>();
+   * ls.getState();
+   * ls.getState().test;
+   */
   getState(): T {
     return this.accumulationObservable.state;
   }

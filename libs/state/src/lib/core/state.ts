@@ -65,7 +65,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
       typeof keyOrStateOrProjectState === 'object' &&
       stateOrSliceProjectFn === undefined
     ) {
-      this.accumulationObservable.nextSlice(keyOrStateOrProjectState);
+      this.accumulationObservable.nextSliceOrObservable(keyOrStateOrProjectState);
       return;
     }
 
@@ -73,7 +73,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
       typeof keyOrStateOrProjectState === 'function' &&
       stateOrSliceProjectFn === undefined
     ) {
-      this.accumulationObservable.nextSlice(
+      this.accumulationObservable.nextSliceOrObservable(
         keyOrStateOrProjectState(this.accumulationObservable.state)
       );
       return;
@@ -87,7 +87,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
       state[keyOrStateOrProjectState] = stateOrSliceProjectFn(
         this.accumulationObservable.state
       );
-      this.accumulationObservable.nextSlice(state);
+      this.accumulationObservable.nextSliceOrObservable(state);
       return;
     }
 
@@ -123,7 +123,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
       projectValueFn === undefined
     ) {
       const slice$ = keyOrSlice$.pipe(filter(slice => slice !== undefined));
-      this.accumulationObservable.nextSliceObservable(slice$);
+      this.accumulationObservable.nextSliceOrObservable(slice$);
       return;
     }
 
@@ -138,7 +138,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
         filter(slice => slice !== undefined),
         map(v => project(this.getState(), v))
       );
-      this.accumulationObservable.nextSliceObservable(slice$);
+      this.accumulationObservable.nextSliceOrObservable(slice$);
       return;
     }
 
@@ -152,7 +152,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
         filter(slice => slice !== undefined),
         map(value => ({ ...{}, [key]: value }))
       );
-      this.accumulationObservable.nextSliceObservable(slice$);
+      this.accumulationObservable.nextSliceOrObservable(slice$);
       return;
     }
 
@@ -166,7 +166,7 @@ export class RxJsState<T extends object> implements Subscribable<any> {
         filter(slice => slice !== undefined),
         map(value => ({ ...{}, [key]: projectValueFn(this.getState(), value) }))
       );
-      this.accumulationObservable.nextSliceObservable(slice$);
+      this.accumulationObservable.nextSliceOrObservable(slice$);
       return;
     }
 
